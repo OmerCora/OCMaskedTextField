@@ -45,3 +45,8 @@ Blank values can also be set manually for each speacial character. (default is "
 [textField showMask];
 </code></pre>
 
+License
+=================
+
+Licensed under the Apache License, Version 2.0
+See Details: http://www.apache.org/licenses/LICENSE-2.0.html
