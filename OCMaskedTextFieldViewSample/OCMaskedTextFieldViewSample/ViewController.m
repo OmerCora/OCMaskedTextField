@@ -25,6 +25,22 @@
 {
     [super viewDidLoad];
     
+    [self addSampleTextFields];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)addSampleTextFields
+{
     //IBAN field
     UILabel* label1 = [[UILabel alloc] initWithFrame:CGRectMake(20, 70, 280, 20)];
     label1.text = @"IBAN:";
@@ -35,13 +51,14 @@
                                         initWithFrame:CGRectMake(20, 94, 280, 33)
                                         andMask:@"TR - #### #### #### #### #### ####"
                                         showMask:YES];
-    [[textField maskedTextField] setBorderStyle:UITextBorderStyleRoundedRect];
+    [[textField maskedTextField] setBorderStyle:UITextBorderStyleNone];
     [[textField maskedTextField] setFont:MEDIUM_FONT];
     [[textField maskedTextField] setTintColor:KILL_LA_KILL_RED_COLOR];
     [[textField maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
     //Placeholder mode
     //[textField setPlaceholderMode:YES];
     //[[textField maskedTextField] setPlaceholder:@"IBAN"];
+    [self setupTextField:[textField maskedTextField]];
     [self.view addSubview:textField];
     
     
@@ -55,10 +72,11 @@
                                          initWithFrame:CGRectMake(20, 94+68, 280, 33)
                                          andMask:@"Day: ## / Month: ##"
                                          showMask:YES];
-    [[textField2 maskedTextField] setBorderStyle:UITextBorderStyleRoundedRect];
+    [[textField2 maskedTextField] setBorderStyle:UITextBorderStyleNone];
     [[textField2 maskedTextField] setFont:MEDIUM_FONT];
     [[textField2 maskedTextField] setTintColor:KILL_LA_KILL_RED_COLOR];
     [[textField2 maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    [self setupTextField:[textField2 maskedTextField]];
     [self.view addSubview:textField2];
     
     
@@ -72,10 +90,11 @@
                                          initWithFrame:CGRectMake(20, 94+68+68, 280, 33)
                                          andMask:@"+90 (###) ### ## ##"
                                          showMask:YES];
-    [[textField3 maskedTextField] setBorderStyle:UITextBorderStyleRoundedRect];
+    [[textField3 maskedTextField] setBorderStyle:UITextBorderStyleNone];
     [[textField3 maskedTextField] setFont:MEDIUM_FONT];
     [[textField3 maskedTextField] setTintColor:KILL_LA_KILL_RED_COLOR];
     [[textField3 maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    [self setupTextField:[textField3 maskedTextField]];
     [self.view addSubview:textField3];
     
     
@@ -91,25 +110,27 @@
                                          showMask:YES];
     [textField4 setNumericBlank:@"  " alphanumericBlank:@"  " letterBlank:@"  "];
     [textField4 showMask];
-    [[textField4 maskedTextField] setBorderStyle:UITextBorderStyleRoundedRect];
+    [[textField4 maskedTextField] setBorderStyle:UITextBorderStyleNone];
     [[textField4 maskedTextField] setFont:MEDIUM_FONT];
     [[textField4 maskedTextField] setTintColor:KILL_LA_KILL_RED_COLOR];
     [[textField4 maskedTextField] setTextAlignment:NSTextAlignmentCenter];
     [[textField4 maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    [self setupTextField:[textField4 maskedTextField]];
     [self.view addSubview:textField4];
     
     [textField becomeFirstResponder];
 }
 
--(void)viewDidAppear:(BOOL)animated
+- (void)setupTextField:(UITextField*)textField
 {
-    [super viewDidAppear:animated];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    textField.backgroundColor    = [UIColor whiteColor];
+    textField.layer.borderColor  = [UIColor whiteColor].CGColor;
+    textField.layer.borderWidth  = 0.0;
+    textField.layer.cornerRadius = 1.0;
+    if (textField.textAlignment != NSTextAlignmentCenter)
+    {
+        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0);
+    }
 }
 
 @end
