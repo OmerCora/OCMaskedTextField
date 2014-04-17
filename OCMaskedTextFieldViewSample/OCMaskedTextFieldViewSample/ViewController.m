@@ -39,6 +39,9 @@
     [[textField maskedTextField] setFont:MEDIUM_FONT];
     [[textField maskedTextField] setTintColor:KILL_LA_KILL_RED_COLOR];
     [[textField maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    //Placeholder mode
+    //[textField setPlaceholderMode:YES];
+    //[[textField maskedTextField] setPlaceholder:@"IBAN"];
     [self.view addSubview:textField];
     
     

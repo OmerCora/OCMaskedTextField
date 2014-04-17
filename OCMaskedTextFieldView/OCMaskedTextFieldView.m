@@ -46,6 +46,8 @@
     //subViews
     UITextField *maskedTextField;
     UIButton *button;
+    
+    BOOL showPlaceholder;
 }
 
 #pragma mark - Init
@@ -81,6 +83,7 @@
 
 -(void)configureViewShowMask:(BOOL)showMask
 {
+    showPlaceholder = NO;
     inputText = @"";
     
     numericBlank      = @"_";
@@ -147,6 +150,19 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self selectTextForInput:textField atRange:NSMakeRange([self calculateCaretLocation], 0)];
+    
+    if (showPlaceholder && inputText.length == 0)
+    {
+        [self textField:maskedTextField shouldChangeCharactersInRange:NSMakeRange(0, 0) replacementString:@""];
+    }
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (showPlaceholder && inputText.length == 0)
+    {
+        textField.text = @"";
+    }
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -224,6 +240,12 @@
 {
     inputText = @"";
     [self textField:maskedTextField shouldChangeCharactersInRange:NSMakeRange(0, 0) replacementString:@""];
+}
+
+- (void)setPlaceholderMode:(BOOL)mode
+{
+    //NO by default
+    showPlaceholder = mode;
 }
 
 #pragma mark - Text Field Caret placement

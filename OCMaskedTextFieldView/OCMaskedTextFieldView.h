@@ -58,6 +58,9 @@
 //resets the field
 - (void)showMask;
 
+//when set YES, view shows the placeholder text when the textfield ends editing;
+- (void)setPlaceholderMode:(BOOL)mode;
+
 
 @end
 
