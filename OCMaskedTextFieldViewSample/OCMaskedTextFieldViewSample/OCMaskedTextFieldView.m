@@ -81,6 +81,8 @@
     return self;
 }
 
+#pragma mark - Configuration Methods
+
 -(void)configureViewShowMask:(BOOL)showMask
 {
     showPlaceholder = NO;
@@ -144,6 +146,22 @@
 {
     return maskedTextField;
 }
+
+- (NSString*)getRawInputText
+{
+    return inputText;
+}
+
+- (BOOL)isFieldComplete
+{
+    NSString *speacialChars = [NSString stringWithFormat:@"%@%@%@",MASK_CHAR_ALPHANUMERIC,MASK_CHAR_NUMERIC,MASK_CHAR_LETTER];
+    NSCharacterSet *characterSet = [[NSCharacterSet characterSetWithCharactersInString:speacialChars] invertedSet];
+    NSString *rawFormat = [format stringByTrimmingCharactersInSet:characterSet];
+    rawFormat = [rawFormat stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    return rawFormat.length == inputText.length;
+}
+
 
 #pragma mark - Text Field Delegate Methods
 
@@ -379,6 +397,74 @@
     {
         return NO;
     }
+}
+
+//code taken from: http://www.informit.com/articles/article.aspx?p=1684315&seqNum=3
+#define BUFFER_SIZE 32
+- (void)setRawInput:(NSString*)rawInput
+{
+    int hardIndex = 0;
+    NSArray *indexArr = [self getSpecialCharIndexArray];
+    
+    NSRange range = { 0, BUFFER_SIZE };
+    NSUInteger end = [rawInput length];
+    while (range.location < end)
+    {
+        unichar buffer[BUFFER_SIZE];
+        if (range.location + range.length > end)
+        {
+            range.length = end - range.location;
+        }
+        [rawInput getCharacters: buffer range: range];
+        range.location += BUFFER_SIZE;
+        for (unsigned i=0 ; i<range.length ; i++)
+        {
+            
+            if (hardIndex >= indexArr.count)
+            {
+                return;
+            }
+            
+            unichar c = buffer[i];
+            NSString* s = [NSString stringWithCharacters:&c length:1];
+            
+            int loc = [[indexArr objectAtIndex:hardIndex] intValue];
+            [self applySimpleMaskOnTextfield:self.maskedTextField range:NSMakeRange(loc, 1) replacementString:s];
+            
+            hardIndex++;
+        }
+    }
+}
+
+-(NSArray*)getSpecialCharIndexArray
+{
+    int hardIndex = 0;
+    
+    NSMutableArray *indexArr = [[NSMutableArray alloc] init];
+    NSRange range = { 0, BUFFER_SIZE };
+    NSUInteger end = [format length];
+    while (range.location < end)
+    {
+        unichar buffer[BUFFER_SIZE];
+        if (range.location + range.length > end)
+        {
+            range.length = end - range.location;
+        }
+        [format getCharacters: buffer range: range];
+        range.location += BUFFER_SIZE;
+        for (unsigned i=0 ; i<range.length ; i++)
+        {
+            hardIndex++;
+            
+            unichar c = buffer[i];
+            NSString* s = [NSString stringWithCharacters:&c length:1];
+            if ([self isSpecialCharacter:s])
+            {
+                [indexArr addObject:[NSNumber numberWithInt:hardIndex]];
+            }
+        }
+    }
+    return [NSArray arrayWithArray:indexArr];
 }
 
 #pragma mark - Clear

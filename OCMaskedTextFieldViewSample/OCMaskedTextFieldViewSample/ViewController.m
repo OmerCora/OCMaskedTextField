@@ -55,6 +55,20 @@
     [[textField maskedTextField] setFont:MEDIUM_FONT];
     [[textField maskedTextField] setTintColor:KILL_LA_KILL_RED_COLOR];
     [[textField maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    
+    /* 
+    New Method to programatically assign input to a masked field
+    excess text will be ignored.
+    
+    setting 1234123412341234123412341234 to an IBAN field works as follows:
+    mask  : TR - #### #### #### #### #### ####
+    
+    [textField setRawInput:@"1234123412341234123412341234"];
+    
+    output: TR - 1234 1234 1234 1234 1234 1234   
+     */
+    [textField setRawInput:@"1234123412341234123412341234"];
+    
     //Placeholder mode
     //[textField setPlaceholderMode:YES];
     //[[textField maskedTextField] setPlaceholder:@"IBAN"];
@@ -78,7 +92,6 @@
     [[textField2 maskedTextField] setKeyboardAppearance:UIKeyboardAppearanceDark];
     [self setupTextField:[textField2 maskedTextField]];
     [self.view addSubview:textField2];
-    
     
     //phone number field
     UILabel* label3 = [[UILabel alloc] initWithFrame:CGRectMake(20, 70+68+68, 280, 20)];

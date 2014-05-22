@@ -54,6 +54,10 @@
 - (void)setNumericBlank: (NSString*) numblank alphanumericBlank: (NSString*)alphaNumBlank letterBlank:(NSString*)letBlank;
 
 - (UITextField*)maskedTextField;
+//get the user input text without any format
+- (NSString*)getRawInputText;
+//validation for the completion of the masked field
+- (BOOL)isFieldComplete;
 
 //resets the field
 - (void)showMask;
@@ -61,6 +65,8 @@
 //when set YES, view shows the placeholder text when the textfield ends editing;
 - (void)setPlaceholderMode:(BOOL)mode;
 
+//apply the mask onto a raw input
+- (void)setRawInput:(NSString*)rawInput;
 
 @end
 
