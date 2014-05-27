@@ -68,6 +68,7 @@
     {
         format    = maskString;
         [self configureViewShowMask:showMask];
+        [self autoKeyboardDecision];
     }
     return self;
 }
@@ -124,6 +125,7 @@
 {
     format = maskString;
     [maskedTextField resignFirstResponder];
+    [self autoKeyboardDecision];
     maskedTextField.text = @"";
 }
 
@@ -465,6 +467,36 @@
         }
     }
     return [NSArray arrayWithArray:indexArr];
+}
+
+-(void)autoKeyboardDecision
+{
+    int hardIndex = 0;
+    NSRange range = { 0, BUFFER_SIZE };
+    NSUInteger end = [format length];
+    while (range.location < end)
+    {
+        unichar buffer[BUFFER_SIZE];
+        if (range.location + range.length > end)
+        {
+            range.length = end - range.location;
+        }
+        [format getCharacters: buffer range: range];
+        range.location += BUFFER_SIZE;
+        for (unsigned i=0 ; i<range.length ; i++)
+        {
+            hardIndex++;
+            
+            unichar c = buffer[i];
+            NSString* s = [NSString stringWithCharacters:&c length:1];
+            if ([s isEqualToString:MASK_CHAR_ALPHANUMERIC] ||
+                [s isEqualToString:MASK_CHAR_LETTER])
+            {
+                return;
+            }
+        }
+    }
+    [maskedTextField setKeyboardType:UIKeyboardTypeNumberPad];
 }
 
 #pragma mark - Clear
